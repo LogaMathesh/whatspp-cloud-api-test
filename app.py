@@ -37,31 +37,6 @@ async def home(request: Request):
             "messages": messages[::-1],
         },
     )
-
-#######################################################
-# WEBHOOK VERIFICATION
-#######################################################
-
-@app.get("/webhook")
-async def verify(request: Request):
-
-    params = request.query_params
-
-    mode = params.get("hub.mode")
-
-    token = params.get("hub.verify_token")
-
-    challenge = params.get("hub.challenge")
-
-    if mode == "subscribe" and token == VERIFY_TOKEN:
-        return PlainTextResponse(challenge)
-
-    return PlainTextResponse("Verification failed", status_code=403)
-
-
-#######################################################
-# RECEIVE MESSAGES
-#######################################################
 @app.get("/webhook")
 async def verify(request: Request):
 
@@ -71,8 +46,8 @@ async def verify(request: Request):
     token = params.get("hub.verify_token")
     challenge = params.get("hub.challenge")
 
-    print("VERIFY_TOKEN from env:", VERIFY_TOKEN)
-    print("Received token:", token)
+    print("VERIFY_TOKEN:", VERIFY_TOKEN)
+    print("Received:", token)
 
     if mode == "subscribe" and token == VERIFY_TOKEN:
         return PlainTextResponse(challenge)
