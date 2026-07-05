@@ -1,10 +1,11 @@
 import requests
+
 from config import ACCESS_TOKEN, PHONE_NUMBER_ID
 
 
-def send_message(to, message):
+def send_message(phone_number, message):
 
-    url = f"https://graph.facebook.com/v25.0/{PHONE_NUMBER_ID}/messages"
+    url = f"https://graph.facebook.com/v23.0/{PHONE_NUMBER_ID}/messages"
 
     headers = {
         "Authorization": f"Bearer {ACCESS_TOKEN}",
@@ -13,7 +14,7 @@ def send_message(to, message):
 
     payload = {
         "messaging_product": "whatsapp",
-        "to": to,
+        "to": phone_number,
         "type": "text",
         "text": {
             "body": message
@@ -26,4 +27,5 @@ def send_message(to, message):
         json=payload
     )
 
-    print(response.text)
+    print("Status Code:", response.status_code)
+    print("Response:", response.text)
