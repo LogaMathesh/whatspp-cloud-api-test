@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>WhatsApp Messages</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            margin:40px;
+            background:#f5f5f5;
+        }
+
+        .card{
+
+            background:white;
+
+            padding:20px;
+
+            margin-bottom:20px;
+
+            border-radius:10px;
+
+            box-shadow:0 2px 8px rgba(0,0,0,.1);
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Yeah ! Received WhatsApp Messages</h1>
+
+{% for msg in messages %}
+
+<div class="card">
+
+<h3>{{msg.phone}}</h3>
+
+<p>{{msg.message}}</p>
+
+</div>
+
+{% endfor %}
+
+</body>
+
+</html>
