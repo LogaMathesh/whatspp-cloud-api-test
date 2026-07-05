@@ -62,42 +62,19 @@ async def verify(request: Request):
 #######################################################
 # RECEIVE MESSAGES
 #######################################################
+@app.get("/webhook")
+async def verify(request: Request):
 
-@app.post("/webhook")
-async def webhook(request: Request):
+    params = request.query_params
 
-    body = await request.json()
+    mode = params.get("hub.mode")
+    token = params.get("hub.verify_token")
+    challenge = params.get("hub.challenge")
 
-    print(body)
+    print("VERIFY_TOKEN from env:", VERIFY_TOKEN)
+    print("Received token:", token)
 
-    try:
+    if mode == "subscribe" and token == VERIFY_TOKEN:
+        return PlainTextResponse(challenge)
 
-        message = body["entry"][0]["changes"][0]["value"]["messages"][0]
-
-        phone = message["from"]
-
-        text = message["text"]["body"]
-
-        with open(DATA_FILE) as f:
-            data = json.load(f)
-
-        data.append(
-            {
-                "phone": phone,
-                "message": text
-            }
-        )
-
-        with open(DATA_FILE, "w") as f:
-            json.dump(data, f, indent=4)
-
-        send_message(
-            phone,
-            f"I received your message:\n\n{text}"
-        )
-
-    except Exception as e:
-
-        print(e)
-
-    return {"status": "ok"}
+    return PlainTextResponse("Verification failed", status_code=403)
